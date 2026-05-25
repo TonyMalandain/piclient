@@ -41,7 +41,7 @@ fi
 
 # 3. Install Dependencies
 apt-get update
-apt-get install -y sway freerdp2-wayland xwayland agetty
+apt-get install -y sway freerdp2-wayland xwayland
 
 # 4. Create Dedicated User
 if ! id "$NEW_USER" &>/dev/null; then
@@ -125,7 +125,7 @@ systemctl reset-failed
 
 echo ""
 echo "📦 Note: The following packages were installed and have NOT been removed:"
-echo "     sway, freerdp2-wayland, xwayland, agetty"
+echo "     sway, freerdp2-wayland, xwayland"
 echo "   Remove them manually if no longer needed:"
 echo "     sudo apt-get remove sway freerdp2-wayland xwayland"
 echo ""
