@@ -60,6 +60,8 @@ CONFIG_DIR="/home/$NEW_USER/.config/sway"
 mkdir -p "$CONFIG_DIR"
 
 cat <<EOF > "$CONFIG_DIR/config"
+set \$mod Mod4
+
 # --- BORDERLESS MANAGEMENT ---
 default_border none
 default_floating_border none
