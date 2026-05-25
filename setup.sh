@@ -75,9 +75,6 @@ bar mode hide
 # The Infinite RDP Loop: Respawns if closed or crashed
 exec bash -c "while true; do wlfreerdp /v:$REMOTE_IP /u:$REMOTE_USER /p:$REMOTE_PASS /f /cert-ignore /network:auto; sleep 2; done"
 
-# Security: Disable ability to exit Sway or open terminal
-unbindsym \$mod+Shift+e
-unbindsym \$mod+Return
 EOF
 
 # 7. Configure .bash_profile for Session Lockdown
