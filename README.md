@@ -29,3 +29,29 @@ The full setup script is in [`setup.sh`](setup.sh). No manual edits are needed â
 * **Wayland Native**: Uses wlfreerdp for high-performance hardware acceleration on the Pi.
 
 If you need to perform maintenance on the Pi, plug in a keyboard and press **Ctrl+Alt+F2** to switch to a different TTY and log in with your administrative user.
+
+## ---
+
+**Uninstalling**
+
+The setup script creates an uninstall script at `/usr/local/sbin/thinclient-uninstall.sh`.
+
+To revert the thin client setup:
+
+1. Press **Ctrl+Alt+F2** to switch to a free TTY
+2. Log in with your administrative user
+3. Run:
+
+```bash
+sudo /usr/local/sbin/thinclient-uninstall.sh
+```
+
+The script will:
+- Remove the `thinclient` user and its home directory
+- Remove the TTY1 autologin override
+- Reboot the system
+
+> **Note:** Installed packages (`sway`, `freerdp2-wayland`, `xwayland`) are left in place. Remove them manually if no longer needed:
+> ```bash
+> sudo apt-get remove sway freerdp2-wayland xwayland
+> ```
