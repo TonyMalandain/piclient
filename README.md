@@ -51,7 +51,7 @@ The script will:
 - Remove the TTY1 autologin override
 - Reboot the system
 
-> **Note:** Installed packages (`sway`, `freerdp2-wayland`, `xwayland`) are left in place. Remove them manually if no longer needed:
+> **Note:** Installed packages (`sway`, `freerdp2-wayland`) are left in place. Remove them manually if no longer needed:
 > ```bash
-> sudo apt-get remove sway freerdp2-wayland xwayland
+> sudo apt-get remove sway freerdp2-wayland
 > ```
