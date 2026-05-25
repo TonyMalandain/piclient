@@ -8,7 +8,9 @@ This guide provides a resilient, borderless, and locked-down RDP thin client set
 
 Run this command on a fresh installation of Raspberry Pi OS Lite. Replace the placeholders with your remote machine's details.
 
-`curl -sSL https://raw.githubusercontent.com/TonyMalandain/piclient/refs/heads/main/setup.sh | sudo bash -s -- <REMOTE_IP> <USERNAME> <PASSWORD>`
+```bash
+curl -sSL https://raw.githubusercontent.com/TonyMalandain/piclient/refs/heads/main/setup.sh | sudo bash -s -- <REMOTE_IP> <USERNAME> <PASSWORD>
+```
 
 ## ---
 
