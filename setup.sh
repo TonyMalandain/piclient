@@ -55,7 +55,22 @@ for grp in video input render dialout; do
     fi
 done
 
-# 6. Create Borderless Sway Config with RESTART LOOP
+# 6. Create RDP Loop Script
+RDP_SCRIPT="/home/$NEW_USER/start-rdp.sh"
+cat <<EOF > "$RDP_SCRIPT"
+#!/bin/bash
+LOG=/home/$NEW_USER/rdp.log
+rm -f "\$LOG"
+while true; do
+    echo "[\$(date)] Starting wlfreerdp..." >> "\$LOG"
+    wlfreerdp /v:$REMOTE_IP /u:$REMOTE_USER /p:$REMOTE_PASS /f /cert:ignore /network:auto >> "\$LOG" 2>&1
+    echo "[\$(date)] wlfreerdp exited with code \$?" >> "\$LOG"
+    sleep 2
+done
+EOF
+chmod +x "$RDP_SCRIPT"
+
+# 7. Create Borderless Sway Config
 CONFIG_DIR="/home/$NEW_USER/.config/sway"
 mkdir -p "$CONFIG_DIR"
 
@@ -72,20 +87,20 @@ for_window [app_id=".*"] border pixel 0
 # UI Lockdown
 bar mode hide
 
-# The Infinite RDP Loop: Respawns if closed or crashed
-exec bash -c "while true; do wlfreerdp /v:$REMOTE_IP /u:$REMOTE_USER /p:$REMOTE_PASS /f /cert-ignore /network:auto; sleep 2; done"
-
+# DEBUG: launch a terminal instead of RDP
+exec /home/$NEW_USER/start-rdp.sh
 EOF
 
-# 7. Configure .bash_profile for Session Lockdown
+# 8. Configure .bash_profile for Session Lockdown
 cat <<EOF > /home/$NEW_USER/.bash_profile
 # Replace shell with Sway (no shell to fall back to)
 if [[ -z "\$DISPLAY" && "\$(tty)" == /dev/tty1 ]]; then
-  exec sway
+  rm -f /home/thinclient/sway.log
+  exec sway > /home/thinclient/sway.log 2>&1
 fi
 EOF
 
-# 8. Configure Systemd for Console Auto-Login
+# 9. Configure Systemd for Console Auto-Login
 GETTY_CONF="/etc/systemd/system/getty@tty1.service.d"
 mkdir -p "$GETTY_CONF"
 cat <<EOF > "$GETTY_CONF/override.conf"
@@ -94,11 +109,11 @@ ExecStart=
 ExecStart=-/sbin/agetty --autologin $NEW_USER --noclear %I \$TERM
 EOF
 
-# 9. Set Permissions
+# 10. Set Permissions
 chown -R "$NEW_USER:$NEW_USER" "/home/$NEW_USER/"
 chmod +x "/home/$NEW_USER/.bash_profile"
 
-# 10. Generate Uninstall Script
+# 11. Generate Uninstall Script
 UNINSTALL_SCRIPT="/usr/local/sbin/thinclient-uninstall.sh"
 cat <<'UNINSTALL' > "$UNINSTALL_SCRIPT"
 #!/bin/bash
@@ -112,7 +127,7 @@ if [ -d /etc/systemd/system/getty@tty1.service.d ]; then
     echo "  ✔ Removed getty autologin override"
 fi
 
-# Remove thinclient user and home directory
+# Remove thinclient user and home directory (includes start-rdp.sh and logs)
 if id thinclient &>/dev/null; then
     userdel -r thinclient 2>/dev/null || true
     echo "  ✔ Removed thinclient user"

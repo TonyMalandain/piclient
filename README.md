@@ -32,6 +32,29 @@ If you need to perform maintenance on the Pi, plug in a keyboard and press **Ctr
 
 ## ---
 
+**Local Development**
+
+To test changes without pushing to GitHub, run a local HTTP server from your dev machine:
+
+```bash
+chmod +x serve.sh
+./serve.sh
+```
+
+The script will print a ready-to-use `curl` command — copy it, run it on the Pi:
+
+```bash
+curl -sSL http://<DEV_MACHINE_IP>:8080/setup.sh | sudo bash -s -- <REMOTE_IP> <USERNAME> <PASSWORD>
+```
+
+By default the server listens on port `8080`. Pass a different port as an argument if needed:
+
+```bash
+./serve.sh 9090
+```
+
+## ---
+
 **Uninstalling**
 
 The setup script creates an uninstall script at `/usr/local/sbin/thinclient-uninstall.sh`.
